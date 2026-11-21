@@ -22,9 +22,16 @@
 - **Wake-on-LAN** for Macs, PCs, servers and network storage, showing when each one answers
 - **Open in UniFi Network**, which takes a UniFi gateway, switch or access point straight to its panel on your console
 - **Offline vendor lookup** from the IEEE registry, updatable from Settings
+- **Automatic updates** from this repository's releases, with the choice to install, wait or skip each version
 - In English, Spanish (Spain and Latin America), French, German, Italian, Portuguese (Brazil), Japanese and Chinese (Simplified), following your Mac's language
 
-Requires macOS 26 or later. The app runs natively on Apple silicon and Intel.
+## Install
+
+Download the latest `Network-Scanner-x.y.z.dmg` from [Releases](https://github.com/abdyfranco/network-scanner-app/releases), open it and drag **Network Scanner** to **Applications**.
+
+Requires macOS 26 or later; the app runs natively on Apple silicon and Intel. It isn't notarized, so if macOS can't verify it, choose **Open Anyway** in **System Settings → Privacy & Security**.
+
+Network Scanner checks this repository's tags about once a day, and whenever you choose **Network Scanner → Check for Updates…**. When there's a newer version it shows the release notes and offers **Install Update**, **Later** or **Skip This Version**. Installing downloads the release's DMG, checks the app inside (bundle ID, version and code signature), swaps it in place and restarts. Automatic checks can be turned off in **Settings → Updates**.
 
 ## Build from source
 
@@ -39,7 +46,7 @@ Then build:
 
 | Command | What it does |
 |:--|:--|
-| `./build-app.sh` | Builds the universal, ad-hoc signed app into `build/Network Scanner.app` |
+| `./build-app.sh` | Builds the universal, ad-hoc signed app into `build/Network Scanner.app`, and `build/Network-Scanner-<version>.dmg` |
 | `./build-app.sh --open` | Also opens it |
 | `Scripts/update-strings.sh` | Adds new UI text from the code to `Resources/Localizable.xcstrings` |
 | `Scripts/check-strings.py` | Checks that every string is translated in every language |
@@ -52,6 +59,23 @@ The first scan asks for **Local Network** access; allow it, or scans find nothin
 The Wi-Fi tab asks for **Location** access, because macOS shows network addresses (BSSIDs) and the name of the connected network only to apps that have it. Without it, the tab still lists nearby networks with their channel, signal and security. The app never reads your actual location.
 
 Translations live in `Resources/Localizable.xcstrings`, and the permission prompts' text in `Resources/InfoPlist.xcstrings`. To add a language, translate every key into it; `check-strings.py` lists any that are missing.
+
+## Release
+
+The updater picks the highest version among the repository's tags, such as `v1.0.1` or `1.0.1`; pre-release tags like `v1.1.0-beta` are ignored. It installs the `.dmg` attached to that tag's GitHub release. To publish a version:
+
+1. Set `CFBundleShortVersionString` and `CFBundleVersion` in `Resources/Info.plist`.
+2. Run `./build-app.sh`, which also writes `build/Network-Scanner-<version>.dmg`.
+3. Commit, then tag and publish the release with the DMG attached. Its notes appear in the update prompt.
+
+   ```bash
+   git tag v1.0.1 && git push origin v1.0.1
+   gh release create v1.0.1 build/Network-Scanner-1.0.1.dmg --title "Network Scanner 1.0.1" --notes "What changed"
+   ```
+
+If the newest tag has no release or no DMG, the prompt offers **View Release** instead. Installing in place needs the app in a folder it can write to, such as `/Applications` for an administrator, or `~/Applications`.
+
+To try the updater without publishing anything, point it at a local copy of the API with the hidden `UpdateFeedURL` setting, for example `open "build/Network Scanner.app" --args -UpdateFeedURL http://127.0.0.1:8765`. It expects `tags` and `releases/tags/<tag>` in GitHub's format there, and accepts plain HTTP only from this Mac.
 
 ## Command line
 

@@ -33,6 +33,8 @@ struct SettingsSheet: View {
 
 struct SettingsView: View {
     @Environment(AppModel.self) private var model
+    @AppStorage(Updater.Keys.checkAutomatically) private var checksForUpdates = true
+    @AppStorage(Updater.Keys.lastCheck) private var lastUpdateCheck = 0.0
 
     var body: some View {
         @Bindable var model = model
@@ -77,6 +79,16 @@ struct SettingsView: View {
                 Button("Restore Default Options") { model.options = ScanOptions() }
             }
 
+            Section("Updates") {
+                Toggle("Check for updates automatically", isOn: $checksForUpdates)
+                LabeledContent {
+                    Button("Check Now") { Updater.shared.check(userInitiated: true) }
+                } label: {
+                    Text(verbatim: "Network Scanner \(AppVersion.current)")
+                    Text(lastCheckedDescription)
+                }
+            }
+
             Section {
                 Text("Network Scanner sends ICMP, TCP, UDP and multicast DNS probes only to the addresses you choose. Scan networks you own or are authorized to test.")
                     .font(.caption)
@@ -86,5 +98,11 @@ struct SettingsView: View {
         .formStyle(.grouped)
         .frame(width: 480)
         .fixedSize(horizontal: false, vertical: true)
+    }
+
+    private var lastCheckedDescription: String {
+        guard lastUpdateCheck > 0 else { return String(localized: "Not checked yet") }
+        let date = Date(timeIntervalSince1970: lastUpdateCheck)
+        return String(localized: "Last checked \(date.formatted(.relative(presentation: .named)))")
     }
 }

@@ -60,6 +60,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         SystemLimits.raiseFileDescriptorLimit()
         if SampleNetwork.isRequested { SampleNetwork.prepareWindow() }
+        // Checks GitHub for a newer version. Not for demo runs or `swift run`, which can't update in place.
+        if !SampleNetwork.isRequested, Bundle.main.bundleIdentifier != nil { Updater.shared.start() }
         // When launched as a bare executable (`swift run`), become a regular foreground app.
         if Bundle.main.bundleIdentifier == nil {
             NSApp.setActivationPolicy(.regular)
@@ -70,11 +72,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool { true }
 }
 
-/// Network Scanner › Settings… (⌘,) opens Settings as a sheet on the front window.
+/// Network Scanner › Check for Updates…, and Settings… (⌘,), which opens Settings as a sheet on the front window.
 struct SettingsCommands: Commands {
     @FocusedValue(\.showSettings) private var showSettings
 
     var body: some Commands {
+        CommandGroup(after: .appInfo) {
+            Button("Check for Updates…") { Updater.shared.check(userInitiated: true) }
+                .disabled(Bundle.main.bundleIdentifier == nil)
+        }
         CommandGroup(replacing: .appSettings) {
             Button("Settings…") { showSettings?() }
                 .keyboardShortcut(",")

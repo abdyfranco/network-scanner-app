@@ -6,8 +6,9 @@
 #  Copyright © 2026 Advandz Technologies, LLC.
 #
 
-# Builds "Network Scanner.app" as a universal (Apple Silicon + Intel) binary.
-#   ./build-app.sh            → "build/Network Scanner.app"
+# Builds "Network Scanner.app" as a universal (Apple Silicon + Intel) binary, and the disk image
+# a GitHub release carries for the app's updater.
+#   ./build-app.sh            → "build/Network Scanner.app" and build/Network-Scanner-<version>.dmg
 #   ./build-app.sh --open     → build and launch
 set -euo pipefail
 cd "$(dirname "$0")"
@@ -70,9 +71,24 @@ echo "  $(/usr/libexec/PlistBuddy -c "Print :CFBundleLocalizations" "$PLIST" | s
 
 echo "▸ Signing (ad-hoc)…"
 codesign --force --sign - --timestamp=none "$APP"
+# The updater checks the downloaded app's signature the same way.
+codesign --verify --strict "$APP"
 
 echo "▸ Architectures: $(lipo -archs "$APP/Contents/MacOS/NetScanner")"
 echo "✓ Built $APP"
+
+# Disk image: the app plus a shortcut to /Applications to drag it onto.
+VERSION="$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" Resources/Info.plist)"
+DMG="build/Network-Scanner-$VERSION.dmg"
+echo "▸ Packing $DMG…"
+STAGE="$(mktemp -d)"
+trap 'rm -rf "${STAGE:?}"' EXIT
+ditto "$APP" "$STAGE/Network Scanner.app"
+ln -s /Applications "$STAGE/Applications"
+rm -f "$DMG"
+hdiutil create -volname "Network Scanner $VERSION" -srcfolder "$STAGE" -fs HFS+ -format UDZO -ov "$DMG" >/dev/null
+hdiutil verify "$DMG" >/dev/null
+echo "✓ Packed $DMG"
 
 if [[ "${1:-}" == "--open" ]]; then
     open "$APP"
