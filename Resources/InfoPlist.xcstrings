@@ -1,0 +1,162 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "NSLocalNetworkUsageDescription" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Network Scanner findet und erkennt Geräte in deinem lokalen Netzwerk und kann ihre offenen Ports scannen."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Network Scanner detecta e identifica los dispositivos de tu red local y puede escanear sus puertos abiertos."
+          }
+        },
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Network Scanner detecta e identifica los dispositivos de tu red local y puede escanear sus puertos abiertos."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Network Scanner découvre et identifie les appareils de votre réseau local et peut analyser leurs ports ouverts."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Network Scanner rileva e identifica i dispositivi della tua rete locale e può scansionarne le porte aperte."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Network Scannerはローカルネットワーク上のデバイスを検出・識別し、オープンなポートをスキャンできます。"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O Network Scanner descobre e identifica os dispositivos da sua rede local e pode verificar as portas abertas deles."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Network Scanner 会发现并识别你本地网络中的设备，并可扫描其开放端口。"
+          }
+        }
+      }
+    },
+    "NSLocationUsageDescription" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Network Scanner nutzt den Zugriff auf den Standort nur, um Namen und Adressen von WLAN-Netzwerken in der Nähe zu lesen, die macOS nur Apps mit diesem Zugriff zeigt. Dein Standort wird weder verwendet noch gespeichert."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Network Scanner usa el acceso a la ubicación solo para leer los nombres y las direcciones de las redes Wi-Fi cercanas, que macOS solo muestra a las apps con este acceso. Tu ubicación no se usa ni se guarda."
+          }
+        },
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Network Scanner usa el acceso a la ubicación solo para leer los nombres y las direcciones de las redes Wi-Fi cercanas, que macOS solo muestra a las apps con este acceso. Tu ubicación no se usa ni se guarda."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Network Scanner utilise l’accès à la localisation uniquement pour lire les noms et adresses des réseaux Wi-Fi à proximité, que macOS ne montre qu’aux apps disposant de cet accès. Votre position n’est ni utilisée ni conservée."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Network Scanner usa l’accesso alla posizione solo per leggere i nomi e gli indirizzi delle reti Wi-Fi vicine, che macOS mostra solo alle app con questo accesso. La tua posizione non viene usata né conservata."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Network Scannerは、近くのWi-Fiネットワークの名前とアドレスを読み取るためだけに位置情報へのアクセスを使用します。macOSはこれらの情報を、位置情報へのアクセスを持つAppにのみ提供します。位置情報そのものは使用も保存もされません。"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O Network Scanner usa o acesso à localização apenas para ler os nomes e endereços das redes Wi-Fi próximas, que o macOS mostra somente aos apps com esse acesso. Sua localização não é usada nem armazenada."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Network Scanner 仅使用位置访问权限来读取附近无线局域网的名称和地址，macOS 只向拥有此权限的 App 提供这些信息。你的位置不会被使用或存储。"
+          }
+        }
+      }
+    },
+    "NSLocationWhenInUseUsageDescription" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Network Scanner nutzt den Zugriff auf den Standort nur, um Namen und Adressen von WLAN-Netzwerken in der Nähe zu lesen, die macOS nur Apps mit diesem Zugriff zeigt. Dein Standort wird weder verwendet noch gespeichert."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Network Scanner usa el acceso a la ubicación solo para leer los nombres y las direcciones de las redes Wi-Fi cercanas, que macOS solo muestra a las apps con este acceso. Tu ubicación no se usa ni se guarda."
+          }
+        },
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Network Scanner usa el acceso a la ubicación solo para leer los nombres y las direcciones de las redes Wi-Fi cercanas, que macOS solo muestra a las apps con este acceso. Tu ubicación no se usa ni se guarda."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Network Scanner utilise l’accès à la localisation uniquement pour lire les noms et adresses des réseaux Wi-Fi à proximité, que macOS ne montre qu’aux apps disposant de cet accès. Votre position n’est ni utilisée ni conservée."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Network Scanner usa l’accesso alla posizione solo per leggere i nomi e gli indirizzi delle reti Wi-Fi vicine, che macOS mostra solo alle app con questo accesso. La tua posizione non viene usata né conservata."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Network Scannerは、近くのWi-Fiネットワークの名前とアドレスを読み取るためだけに位置情報へのアクセスを使用します。macOSはこれらの情報を、位置情報へのアクセスを持つAppにのみ提供します。位置情報そのものは使用も保存もされません。"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O Network Scanner usa o acesso à localização apenas para ler os nomes e endereços das redes Wi-Fi próximas, que o macOS mostra somente aos apps com esse acesso. Sua localização não é usada nem armazenada."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Network Scanner 仅使用位置访问权限来读取附近无线局域网的名称和地址，macOS 只向拥有此权限的 App 提供这些信息。你的位置不会被使用或存储。"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

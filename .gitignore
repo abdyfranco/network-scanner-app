@@ -1,0 +1,18 @@
+# Build output: build-app.sh and Scripts/make-icon.sh write everything here
+# (the app bundle and the icon previews).
+/build/
+
+# Swift Package Manager and Xcode leftovers, if the package is opened there
+.build/
+.swiftpm/
+DerivedData/
+xcuserdata/
+*.xcuserstate
+*.dSYM/
+*.iconset/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*

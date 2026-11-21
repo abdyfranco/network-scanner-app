@@ -1,0 +1,173 @@
+{
+  "fill": {
+    "linear-gradient": [
+      "display-p3:0.34118,0.62745,1.00000,1.00000",
+      "display-p3:0.09020,0.25098,0.81569,1.00000"
+    ]
+  },
+  "fill-specializations": [
+    {
+      "appearance": "dark",
+      "value": {
+        "linear-gradient": [
+          "display-p3:0.16863,0.18824,0.25098,1.00000",
+          "display-p3:0.05098,0.05882,0.09412,1.00000"
+        ]
+      }
+    }
+  ],
+  "groups": [
+    {
+      "name": "Devices",
+      "layers": [
+        {
+          "name": "hub",
+          "image-name": "hub.svg",
+          "glass": true,
+          "fill-specializations": [
+            {
+              "appearance": "dark",
+              "value": {
+                "solid": "display-p3:0.56078,0.78824,1.00000,1.00000"
+              }
+            },
+            {
+              "appearance": "tinted",
+              "value": {
+                "solid": "srgb:1.00000,1.00000,1.00000,1.00000"
+              }
+            }
+          ]
+        },
+        {
+          "name": "nodes",
+          "image-name": "nodes.svg",
+          "glass": true,
+          "fill-specializations": [
+            {
+              "appearance": "dark",
+              "value": {
+                "solid": "display-p3:0.56078,0.78824,1.00000,1.00000"
+              }
+            },
+            {
+              "appearance": "tinted",
+              "value": {
+                "solid": "srgb:1.00000,1.00000,1.00000,1.00000"
+              }
+            }
+          ]
+        }
+      ],
+      "lighting": "individual",
+      "shadow": {
+        "kind": "layer-color",
+        "opacity": 0.5
+      },
+      "specular": true,
+      "translucency": {
+        "enabled": false,
+        "value": 0.5
+      }
+    },
+    {
+      "name": "Sweep",
+      "layers": [
+        {
+          "name": "sweep",
+          "image-name": "sweep.svg",
+          "glass": true,
+          "fill-specializations": [
+            {
+              "appearance": "dark",
+              "value": {
+                "solid": "display-p3:0.25098,0.45098,0.90196,1.00000"
+              }
+            },
+            {
+              "appearance": "tinted",
+              "value": {
+                "solid": "srgb:1.00000,1.00000,1.00000,1.00000"
+              }
+            }
+          ],
+          "opacity-specializations": [
+            {
+              "appearance": "tinted",
+              "value": 0.4
+            }
+          ]
+        }
+      ],
+      "lighting": "combined",
+      "shadow": {
+        "kind": "neutral",
+        "opacity": 0.3
+      },
+      "specular": true,
+      "translucency": {
+        "enabled": true,
+        "value": 0.25
+      }
+    },
+    {
+      "name": "Screen",
+      "layers": [
+        {
+          "name": "rings",
+          "image-name": "rings.svg",
+          "glass": false,
+          "fill-specializations": [
+            {
+              "appearance": "dark",
+              "value": {
+                "solid": "display-p3:0.36078,0.39216,0.47059,1.00000"
+              }
+            }
+          ],
+          "opacity-specializations": [
+            {
+              "appearance": "tinted",
+              "value": 0.25
+            }
+          ]
+        },
+        {
+          "name": "screen",
+          "image-name": "screen.svg",
+          "glass": true,
+          "fill-specializations": [
+            {
+              "appearance": "dark",
+              "value": {
+                "solid": "display-p3:0.24706,0.26667,0.32549,1.00000"
+              }
+            }
+          ],
+          "opacity-specializations": [
+            {
+              "appearance": "tinted",
+              "value": 0.08
+            }
+          ]
+        }
+      ],
+      "blur-material": 0.3,
+      "lighting": "combined",
+      "shadow": {
+        "kind": "neutral",
+        "opacity": 0.45
+      },
+      "specular": true,
+      "translucency": {
+        "enabled": true,
+        "value": 0.35
+      }
+    }
+  ],
+  "supported-platforms": {
+    "squares": [
+      "macOS"
+    ]
+  }
+}

@@ -1,0 +1,79 @@
+#!/bin/bash
+#
+#  build-app.sh
+#  Network Scanner
+#
+#  Copyright © 2026 Advandz Technologies, LLC.
+#
+
+# Builds "Network Scanner.app" as a universal (Apple Silicon + Intel) binary.
+#   ./build-app.sh            → "build/Network Scanner.app"
+#   ./build-app.sh --open     → build and launch
+set -euo pipefail
+cd "$(dirname "$0")"
+
+APP="build/Network Scanner.app"
+
+echo "▸ Compiling universal release binary (arm64 + x86_64)…"
+swift build -c release --arch arm64 --arch x86_64
+BIN="$(swift build -c release --arch arm64 --arch x86_64 --show-bin-path)/NetScanner"
+
+if [ ! -f Resources/AppIcon.icns ]; then
+    echo "▸ Rendering fallback app icon…"
+    Scripts/make-icon.sh
+fi
+
+echo "▸ Assembling $APP…"
+rm -rf "$APP"
+mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
+cp "$BIN" "$APP/Contents/MacOS/NetScanner"
+cp Resources/Info.plist "$APP/Contents/Info.plist"
+cp Resources/oui.txt "$APP/Contents/Resources/oui.txt"
+cp Resources/AppIcon.icns "$APP/Contents/Resources/AppIcon.icns"
+printf "APPL????" > "$APP/Contents/PkgInfo"
+
+# App icon. Resources/AppIcon.icon is an Icon Composer document (Liquid Glass, with Default, Dark,
+# Clear and Tinted appearances). Xcode's actool compiles it into Assets.car; without Xcode the
+# static AppIcon.icns rendered from it (Scripts/make-icon.sh) is used.
+if xcrun --find actool >/dev/null 2>&1; then
+    echo "▸ Compiling Liquid Glass icon…"
+    ICON_OBJ="$(mktemp -d)"
+    # Absolute paths: actool hands off to a long-lived helper (ibtoold) that resolves relative paths
+    # against its own working directory, so a relative path fails whenever that helper started elsewhere.
+    if xcrun actool "$PWD/Resources/AppIcon.icon" \
+        --compile "$PWD/$APP/Contents/Resources" \
+        --platform macosx --target-device mac \
+        --minimum-deployment-target "$(/usr/libexec/PlistBuddy -c "Print :LSMinimumSystemVersion" Resources/Info.plist)" \
+        --app-icon AppIcon --include-all-app-icons \
+        --output-partial-info-plist "$ICON_OBJ/AppIcon-partial.plist" \
+        --errors --warnings >/dev/null; then
+        /usr/libexec/PlistBuddy -c "Add :CFBundleIconName string AppIcon" "$APP/Contents/Info.plist"
+    else
+        echo "  actool failed; using the static AppIcon.icns" >&2
+        cp Resources/AppIcon.icns "$APP/Contents/Resources/AppIcon.icns"
+    fi
+    rm -rf "$ICON_OBJ"
+else
+    echo "▸ Using the static icon (install Xcode 26 to compile the Liquid Glass AppIcon.icon)"
+fi
+
+echo "▸ Compiling localizations…"
+xcrun xcstringstool compile Resources/Localizable.xcstrings --output-directory "$APP/Contents/Resources"
+xcrun xcstringstool compile Resources/InfoPlist.xcstrings --output-directory "$APP/Contents/Resources"
+# Declare every compiled language so macOS (and the standard menus) offer it.
+PLIST="$APP/Contents/Info.plist"
+/usr/libexec/PlistBuddy -c "Add :CFBundleLocalizations array" "$PLIST"
+for dir in "$APP"/Contents/Resources/*.lproj; do
+    /usr/libexec/PlistBuddy -c "Add :CFBundleLocalizations: string $(basename "$dir" .lproj)" "$PLIST"
+done
+echo "  $(/usr/libexec/PlistBuddy -c "Print :CFBundleLocalizations" "$PLIST" | sed -n 's/^ *//p' | grep -v '[{}]' | tr '\n' ' ')"
+
+echo "▸ Signing (ad-hoc)…"
+codesign --force --sign - --timestamp=none "$APP"
+
+echo "▸ Architectures: $(lipo -archs "$APP/Contents/MacOS/NetScanner")"
+echo "✓ Built $APP"
+
+if [[ "${1:-}" == "--open" ]]; then
+    open "$APP"
+fi

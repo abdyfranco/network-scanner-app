@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleDisplayName</key>
+	<string>Network Scanner</string>
+	<key>CFBundleExecutable</key>
+	<string>NetScanner</string>
+	<key>CFBundleIconFile</key>
+	<string>AppIcon</string>
+	<key>CFBundleIdentifier</key>
+	<string>app.netscanner.NetScanner</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>Network Scanner</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0</string>
+	<key>CFBundleVersion</key>
+	<string>1</string>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.utilities</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>26.0</string>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_services._dns-sd._udp</string>
+		<string>_device-info._tcp</string>
+		<string>_airplay._tcp</string>
+		<string>_raop._tcp</string>
+		<string>_companion-link._tcp</string>
+		<string>_apple-mobdev2._tcp</string>
+		<string>_sleep-proxy._udp</string>
+		<string>_smb._tcp</string>
+		<string>_afpovertcp._tcp</string>
+		<string>_adisk._tcp</string>
+		<string>_ssh._tcp</string>
+		<string>_sftp-ssh._tcp</string>
+		<string>_rfb._tcp</string>
+		<string>_http._tcp</string>
+		<string>_https._tcp</string>
+		<string>_ipp._tcp</string>
+		<string>_ipps._tcp</string>
+		<string>_printer._tcp</string>
+		<string>_pdl-datastream._tcp</string>
+		<string>_scanner._tcp</string>
+		<string>_uscan._tcp</string>
+		<string>_googlecast._tcp</string>
+		<string>_spotify-connect._tcp</string>
+		<string>_hap._tcp</string>
+		<string>_hap._udp</string>
+		<string>_homekit._tcp</string>
+		<string>_matter._tcp</string>
+		<string>_matterc._udp</string>
+		<string>_sonos._tcp</string>
+		<string>_workstation._tcp</string>
+		<string>_daap._tcp</string>
+		<string>_touch-able._tcp</string>
+		<string>_mediaremotetv._tcp</string>
+		<string>_amzn-wplay._tcp</string>
+		<string>_androidtvremote2._tcp</string>
+		<string>_airport._tcp</string>
+		<string>_home-assistant._tcp</string>
+		<string>_esphomelib._tcp</string>
+		<string>_ewelink._tcp</string>
+		<string>_remotepairing._tcp</string>
+	</array>
+	<key>NSHighResolutionCapable</key>
+	<true/>
+	<key>NSHumanReadableCopyright</key>
+	<string>Copyright © 2026 Advandz Technologies, LLC.</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Network Scanner discovers and identifies devices on your local network and can scan their open ports.</string>
+	<key>NSLocationUsageDescription</key>
+	<string>Network Scanner uses Location access only to read the names and addresses of nearby Wi-Fi networks, which macOS shares only with apps that have it. Your location isn't used or stored.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Network Scanner uses Location access only to read the names and addresses of nearby Wi-Fi networks, which macOS shares only with apps that have it. Your location isn't used or stored.</string>
+	<key>NSPrincipalClass</key>
+	<string>NSApplication</string>
+</dict>
+</plist>
