@@ -27,7 +27,7 @@
 
 ## Install
 
-Download the latest `Network-Scanner-x.y.z.dmg` from [Releases](https://github.com/abdyfranco/network-scanner-app/releases), open it and drag **Network Scanner** to **Applications**.
+Download the latest `Network-Scanner-x.y.z.dmg` from [Releases](https://github.com/advandz/network-scanner-app/releases), open it and drag **Network Scanner** to **Applications**.
 
 Requires macOS 26 or later; the app runs natively on Apple silicon and Intel. It isn't notarized, so if macOS can't verify it, choose **Open Anyway** in **System Settings → Privacy & Security**.
 

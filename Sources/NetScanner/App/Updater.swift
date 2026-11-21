@@ -101,7 +101,7 @@ private struct GitHubRelease: Decodable {
 @MainActor
 final class Updater: NSObject {
     static let shared = Updater()
-    static let repository = "abdyfranco/network-scanner-app"
+    static let repository = "advandz/network-scanner-app"
 
     /// Settings keys. Automatic checks are on unless turned off in Settings › Updates.
     enum Keys {
