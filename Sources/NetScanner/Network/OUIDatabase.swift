@@ -39,11 +39,14 @@ final class OUIDatabase: @unchecked Sendable {
             candidates.append(exe.appendingPathComponent("oui.txt"))
             candidates.append(exe.appendingPathComponent("../Resources/oui.txt").standardizedFileURL)
         }
-        // Development fallback when launched with `swift run`.
+        #if DEBUG
+        // Development fallback when launched with `swift run`. Debug builds only, so release builds
+        // don't carry the path of the folder they were built in.
         let sourceRoot = URL(fileURLWithPath: #filePath)
             .deletingLastPathComponent().deletingLastPathComponent()
             .deletingLastPathComponent().deletingLastPathComponent()
         candidates.append(sourceRoot.appendingPathComponent("Resources/oui.txt"))
+        #endif
         return candidates.first { FileManager.default.fileExists(atPath: $0.path) }
     }
 

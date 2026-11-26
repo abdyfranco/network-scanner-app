@@ -110,6 +110,8 @@ final class AppModel {
     /// The UniFi OS console found on this network, once something asked for it.
     private(set) var unifiConsole: UniFiConsole?
     @ObservationIgnored private var consoleLookup: Task<UniFiConsole?, Never>?
+    /// Bumped by every scan: a lookup that started before it belongs to what may be another network.
+    @ObservationIgnored private var consoleGeneration = 0
 
     // Wi-Fi
     /// Nearby Wi-Fi networks, from the Mac's own Wi-Fi card.
@@ -259,6 +261,8 @@ final class AppModel {
         }
         ipv6AttachOnly = !userTypedIPv6 && !target.ipv4.isEmpty && !coversSubnet
 
+        // The same subnet can be another network (another site, another Wi-Fi): look the console up again.
+        forgetUniFiConsole()
         let normalizedTarget = targetText.trimmingCharacters(in: .whitespacesAndNewlines)
         if normalizedTarget != lastScannedTarget {
             clearDevices()
@@ -317,7 +321,7 @@ final class AppModel {
         for task in wakeTasks.values { task.cancel() }
         wakeTasks.removeAll()
         wakeStates.removeAll()
-        unifiConsole = nil
+        forgetUniFiConsole()
         if detailTab != .scanner { detailTab = .scanner }
     }
 
@@ -727,7 +731,11 @@ final class AppModel {
     func findUniFiConsole() async -> UniFiConsole? {
         if let unifiConsole { return unifiConsole }
         if isSample { return nil }
-        if let consoleLookup { return await consoleLookup.value }
+        let generation = consoleGeneration
+        if let consoleLookup {
+            let console = await consoleLookup.value
+            return generation == consoleGeneration ? console : nil
+        }
         let consoles = devices.filter(\.kind.hostsUniFiOS).sorted { $0.isGateway && !$1.isGateway }
         var seen = Set<IPv4Address>()
         let candidates = (consoles.flatMap(\.ipv4) + gateways.compactMap { address -> IPv4Address? in
@@ -735,16 +743,25 @@ final class AppModel {
             return nil
         }).filter { seen.insert($0).inserted }
         let lookup = Task { () -> UniFiConsole? in
-            for address in candidates {
+            for address in candidates where !Task.isCancelled {
                 if let console = await UniFiConsole.probe(address) { return console }
             }
             return nil
         }
         consoleLookup = lookup
         let console = await lookup.value
+        // A scan started meanwhile: this answer may be about the previous network.
+        guard generation == consoleGeneration else { return nil }
         consoleLookup = nil
         unifiConsole = console
         return console
+    }
+
+    private func forgetUniFiConsole() {
+        consoleGeneration += 1
+        consoleLookup?.cancel()
+        consoleLookup = nil
+        unifiConsole = nil
     }
 
     /// Opens the device's panel in UniFi Network. Without a console on this network, opens

@@ -31,7 +31,7 @@ Download the latest `Network-Scanner-x.y.z.dmg` from [Releases](https://github.c
 
 Requires macOS 26 or later; the app runs natively on Apple silicon and Intel. It isn't notarized, so if macOS can't verify it, choose **Open Anyway** in **System Settings → Privacy & Security**.
 
-Network Scanner checks this repository's tags about once a day, and whenever you choose **Network Scanner → Check for Updates…**. When there's a newer version it shows the release notes and offers **Install Update**, **Later** or **Skip This Version**. Installing downloads the release's DMG, checks the app inside (bundle ID, version and code signature), swaps it in place and restarts. Automatic checks can be turned off in **Settings → Updates**.
+Network Scanner checks this repository's tags once a day, when it starts: the first launch each day checks, later ones that day don't. It also checks whenever you choose **Network Scanner → Check for Updates…**. When there's a newer version it shows the release notes and offers **Install Update**, **Later** or **Skip This Version**. Installing downloads the release's DMG and installs it only if its signature matches the release key built into the app. It then checks the app inside (bundle ID, version and code signature), swaps it in place and restarts. Automatic checks can be turned off in **Settings → Updates**.
 
 ## macOS Gatekeeper
 
@@ -72,7 +72,7 @@ Then build:
 
 | Command | What it does |
 |:--|:--|
-| `./build-app.sh` | Builds the universal, ad-hoc signed app into `build/Network Scanner.app`, and `build/Network-Scanner-<version>.dmg` |
+| `./build-app.sh` | Builds the universal, ad-hoc signed app (with the hardened runtime) into `build/Network Scanner.app`, and `build/Network-Scanner-<version>.dmg` |
 | `./build-app.sh --open` | Also opens it |
 | `Scripts/update-strings.sh` | Adds new UI text from the code to `Resources/Localizable.xcstrings` |
 | `Scripts/check-strings.py` | Checks that every string is translated in every language |
@@ -88,20 +88,24 @@ Translations live in `Resources/Localizable.xcstrings`, and the permission promp
 
 ## Release
 
-The updater picks the highest version among the repository's tags, such as `v1.0.1` or `1.0.1`; pre-release tags like `v1.1.0-beta` are ignored. It installs the `.dmg` attached to that tag's GitHub release. To publish a version:
+The updater picks the highest version among the repository's tags, such as `v1.0.1` or `1.0.1`; pre-release tags like `v1.1.0-beta` are ignored. It installs the `.dmg` attached to that tag's GitHub release, and only when the release also has the DMG's signature, `<dmg>.sig`, made with the release key.
+
+The release key is an Ed25519 key pair. Its public half is compiled into the app (`Updater.signingKey` in `Sources/NetScanner/App/Updater.swift`). The private half stays in the login Keychain of the Mac that publishes releases, as the password of the item **Network Scanner update signing**. Keep a copy of it somewhere safe, such as a password manager: without it, installed copies refuse every future update. `swift Scripts/update-key.swift generate` creates a key pair if there's none yet; put the public key it prints into `Updater.signingKey`.
+
+To publish a version:
 
 1. Set `CFBundleShortVersionString` and `CFBundleVersion` in `Resources/Info.plist`.
-2. Run `./build-app.sh`, which also writes `build/Network-Scanner-<version>.dmg`.
-3. Commit, then tag and publish the release with the DMG attached. Its notes appear in the update prompt.
+2. Run `./build-app.sh`, which also writes `build/Network-Scanner-<version>.dmg` and, on the Mac holding the release key, its signature `build/Network-Scanner-<version>.dmg.sig`.
+3. Commit, then tag and publish the release with both files attached. Its notes appear in the update prompt.
 
    ```bash
    git tag v1.0.1 && git push origin v1.0.1
-   gh release create v1.0.1 build/Network-Scanner-1.0.1.dmg --title "Network Scanner 1.0.1" --notes "What changed"
+   gh release create v1.0.1 build/Network-Scanner-1.0.1.dmg build/Network-Scanner-1.0.1.dmg.sig --title "Network Scanner 1.0.1" --notes "What changed"
    ```
 
-If the newest tag has no release or no DMG, the prompt offers **View Release** instead. Installing in place needs the app in a folder it can write to, such as `/Applications` for an administrator, or `~/Applications`.
+If the newest tag has no release, no DMG or no signature, the prompt offers **View Release** instead. Installing in place needs the app in a folder it can write to, such as `/Applications` for an administrator, or `~/Applications`.
 
-To try the updater without publishing anything, point it at a local copy of the API with the hidden `UpdateFeedURL` setting, for example `open "build/Network Scanner.app" --args -UpdateFeedURL http://127.0.0.1:8765`. It expects `tags` and `releases/tags/<tag>` in GitHub's format there, and accepts plain HTTP only from this Mac.
+To try the updater without publishing anything, point it at a local copy of the API with the hidden `UpdateFeedURL` setting, for example `open "build/Network Scanner.app" --args -UpdateFeedURL http://127.0.0.1:8765`. It expects `tags` and `releases/tags/<tag>` in GitHub's format there. The setting is ignored unless the feed is on this Mac, and downloads then have to come from this Mac too. Sign the test DMG with `swift Scripts/update-key.swift sign <file.dmg>` and serve the `.sig` beside it.
 
 ## Command line
 

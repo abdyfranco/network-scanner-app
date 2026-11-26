@@ -45,12 +45,18 @@ enum WiFiScanner {
         let connection = WiFiConnection(interface)
         var networks = found.map(WiFiNetwork.init)
             .sorted { $0.rssi != $1.rssi ? $0.rssi > $1.rssi : ($0.ssid ?? "") < ($1.ssid ?? "") }
+        var seen: [String: Int] = [:]
         for index in networks.indices {
             // Only a BSSID identifies the access point the Mac is on: a mesh repeats one name on many.
             if let bssid = networks[index].bssid, bssid == connection?.bssid { networks[index].isConnected = true }
             if networks[index].bssid == nil {
-                // Without a BSSID, give each row an identity of its own for this scan.
-                networks[index].id = "\(networks[index].ssid ?? "")#\(networks[index].channel?.number ?? 0)#\(index)"
+                // Without a BSSID, name the row by what's visible, so it keeps its identity from scan
+                // to scan; only networks that look identical are told apart by their order.
+                let network = networks[index]
+                let key = "\(network.ssid ?? "")#\(network.channel?.number ?? 0)#\(network.channel?.band?.rawValue ?? 0)#\(network.security.title)"
+                let count = seen[key, default: 0]
+                seen[key] = count + 1
+                networks[index].id = count == 0 ? key : "\(key)#\(count)"
             }
         }
         return .success(Scan(interfaceName: interface.interfaceName, networks: networks, connection: connection))

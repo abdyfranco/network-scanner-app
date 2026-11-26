@@ -69,8 +69,10 @@ for dir in "$APP"/Contents/Resources/*.lproj; do
 done
 echo "  $(/usr/libexec/PlistBuddy -c "Print :CFBundleLocalizations" "$PLIST" | sed -n 's/^ *//p' | grep -v '[{}]' | tr '\n' ' ')"
 
-echo "▸ Signing (ad-hoc)…"
-codesign --force --sign - --timestamp=none "$APP"
+echo "▸ Signing (ad-hoc, hardened runtime)…"
+# The hardened runtime stops other code being injected into the app (DYLD_INSERT_LIBRARIES, unsigned
+# libraries). Under it, Location access needs its entitlement: the Wi-Fi tab uses it for BSSIDs.
+codesign --force --sign - --timestamp=none --options runtime --entitlements Resources/NetScanner.entitlements "$APP"
 # The updater checks the downloaded app's signature the same way.
 codesign --verify --strict "$APP"
 
@@ -85,10 +87,19 @@ STAGE="$(mktemp -d)"
 trap 'rm -rf "${STAGE:?}"' EXIT
 ditto "$APP" "$STAGE/Network Scanner.app"
 ln -s /Applications "$STAGE/Applications"
-rm -f "$DMG"
+rm -f "$DMG" "$DMG.sig"
 hdiutil create -volname "Network Scanner $VERSION" -srcfolder "$STAGE" -fs HFS+ -format UDZO -ov "$DMG" >/dev/null
 hdiutil verify "$DMG" >/dev/null
 echo "✓ Packed $DMG"
+
+# The updater installs a disk image only with a valid "<image>.sig" made with the release key
+# (Scripts/update-key.swift). Macs without that key in their Keychain still build, unsigned.
+if security find-generic-password -s "Network Scanner update signing" -a ed25519 >/dev/null 2>&1; then
+    echo "▸ Signing $DMG for the updater…"
+    swift Scripts/update-key.swift sign "$DMG"
+else
+    echo "  No update-signing key in the Keychain: $DMG isn't signed, so the updater won't install it." >&2
+fi
 
 if [[ "${1:-}" == "--open" ]]; then
     open "$APP"

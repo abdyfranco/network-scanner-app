@@ -151,6 +151,7 @@ final class ScanEngine: @unchecked Sendable {
                     group.addTask {
                         await Blocking.run {
                             NetBIOSScanner.query(v4, timeout: max(timeout, 1.0), cancel: cancel) { info in
+                                guard target.contains(.v4(info.address)) else { return }
                                 alive.withLock { _ = $0.insert(.v4(info.address)) }
                                 emit(.netbios(info))
                             }
@@ -165,6 +166,8 @@ final class ScanEngine: @unchecked Sendable {
                 group.addTask {
                     await Blocking.run {
                         UbiquitiDiscovery.discover(unicast: unicast, broadcasts: broadcasts, timeout: max(timeout, 1.5), cancel: cancel) { info in
+                            // The broadcast reaches the whole subnet; keep only devices in the range being scanned.
+                            guard target.contains(.v4(info.address)) else { return }
                             alive.withLock { _ = $0.insert(.v4(info.address)) }
                             emit(.ubiquiti(info))
                         }

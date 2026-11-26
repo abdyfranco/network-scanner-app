@@ -170,7 +170,8 @@ enum InterfaceInventory {
         let raw = UnsafeRawPointer(sa)
         let length = Int(sa.pointee.sa_len)
         var bits = 0
-        for offset in 4..<8 where offset < max(length, 8) {
+        // macOS shortens masks to their last non-zero byte (sa_len 7 for a /24); bytes past sa_len are zero.
+        for offset in 4..<8 where offset < length {
             bits += Int(raw.load(fromByteOffset: offset, as: UInt8.self).nonzeroBitCount)
         }
         return bits

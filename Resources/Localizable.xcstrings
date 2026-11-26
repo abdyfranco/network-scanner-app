@@ -14848,6 +14848,58 @@
         }
       }
     },
+    "The update isn't signed by Network Scanner's developer, so it wasn't installed." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Update ist nicht vom Entwickler von Network Scanner signiert und wurde daher nicht installiert."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La actualización no está firmada por el desarrollador de Network Scanner, así que no se ha instalado."
+          }
+        },
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La actualización no está firmada por el desarrollador de Network Scanner, así que no se instaló."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La mise à jour n’est pas signée par le développeur de Network Scanner, elle n’a donc pas été installée."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’aggiornamento non è firmato dallo sviluppatore di Network Scanner, quindi non è stato installato."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "このアップデートはNetwork Scannerの開発元による署名がないため、インストールされませんでした。"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A atualização não foi assinada pelo desenvolvedor do Network Scanner, por isso não foi instalada."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此更新未经 Network Scanner 开发者签名，因此未安装。"
+          }
+        }
+      }
+    },
     "The wake signal was sent, but the device hasn't answered yet. If it stays asleep, turn on Wake for network access (Mac) or Wake-on-LAN (PC) on it." : {
       "localizations" : {
         "de" : {
