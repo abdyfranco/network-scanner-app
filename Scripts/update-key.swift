@@ -11,14 +11,14 @@
 //   swift Scripts/update-key.swift sign <file.dmg>   writes <file.dmg>.sig
 //
 // The Ed25519 private key lives in a file outside the repository: NETWORK_SCANNER_SIGNING_KEY, by default
-// ~/.network-scanner-signing/update-signing.key. Its public key is compiled into the app
+// ~/.com.advandz.networkscanner/update-signing.key. Its public key is compiled into the app
 // (`Updater.signingKey`). Back the file up and never commit it: without it, installed copies won't
 // accept any future update.
 import CryptoKit
 import Foundation
 
 let keyPath = ProcessInfo.processInfo.environment["NETWORK_SCANNER_SIGNING_KEY"]
-    ?? NSHomeDirectory() + "/.network-scanner-signing/update-signing.key"
+    ?? NSHomeDirectory() + "/.com.advandz.networkscanner/update-signing.key"
 
 func fail(_ message: String) -> Never {
     FileHandle.standardError.write(Data("error: \(message)\n".utf8))

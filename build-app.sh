@@ -94,7 +94,7 @@ echo "✓ Packed $DMG"
 
 # The updater installs a disk image only with a valid "<image>.sig" made with the release key, which
 # lives outside the repository (Scripts/update-key.swift). Macs without the key still build, unsigned.
-if [ -f "${NETWORK_SCANNER_SIGNING_KEY:-$HOME/.network-scanner-signing/update-signing.key}" ]; then
+if [ -f "${NETWORK_SCANNER_SIGNING_KEY:-$HOME/.com.advandz.networkscanner/update-signing.key}" ]; then
     echo "▸ Signing $DMG for the updater…"
     swift Scripts/update-key.swift sign "$DMG"
 else
