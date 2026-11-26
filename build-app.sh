@@ -92,13 +92,13 @@ hdiutil create -volname "Network Scanner $VERSION" -srcfolder "$STAGE" -fs HFS+ 
 hdiutil verify "$DMG" >/dev/null
 echo "✓ Packed $DMG"
 
-# The updater installs a disk image only with a valid "<image>.sig" made with the release key
-# (Scripts/update-key.swift). Macs without that key in their Keychain still build, unsigned.
-if security find-generic-password -s "Network Scanner update signing" -a ed25519 >/dev/null 2>&1; then
+# The updater installs a disk image only with a valid "<image>.sig" made with the release key, which
+# lives outside the repository (Scripts/update-key.swift). Macs without the key still build, unsigned.
+if [ -f "${NETWORK_SCANNER_SIGNING_KEY:-$HOME/.network-scanner-signing/update-signing.key}" ]; then
     echo "▸ Signing $DMG for the updater…"
     swift Scripts/update-key.swift sign "$DMG"
 else
-    echo "  No update-signing key in the Keychain: $DMG isn't signed, so the updater won't install it." >&2
+    echo "  No update-signing key: $DMG isn't signed, so the updater won't install it." >&2
 fi
 
 if [[ "${1:-}" == "--open" ]]; then

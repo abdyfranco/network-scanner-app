@@ -90,12 +90,12 @@ Translations live in `Resources/Localizable.xcstrings`, and the permission promp
 
 The updater picks the highest version among the repository's tags, such as `v1.0.1` or `1.0.1`; pre-release tags like `v1.1.0-beta` are ignored. It installs the `.dmg` attached to that tag's GitHub release, and only when the release also has the DMG's signature, `<dmg>.sig`, made with the release key.
 
-The release key is an Ed25519 key pair. Its public half is compiled into the app (`Updater.signingKey` in `Sources/NetScanner/App/Updater.swift`). The private half stays in the login Keychain of the Mac that publishes releases, as the password of the item **Network Scanner update signing**. Keep a copy of it somewhere safe, such as a password manager: without it, installed copies refuse every future update. `swift Scripts/update-key.swift generate` creates a key pair if there's none yet; put the public key it prints into `Updater.signingKey`.
+The release key is an Ed25519 key pair. Its public half is compiled into the app (`Updater.signingKey` in `Sources/NetScanner/App/Updater.swift`). The private half is a key file outside this repository, `~/.network-scanner-signing/update-signing.key` on the Mac that publishes releases (or the path in `NETWORK_SCANNER_SIGNING_KEY`). Back the file up, for example in a password manager, and never commit it: without it, installed copies refuse every future update. To publish from another Mac, copy the file to the same place there, readable only by you (`chmod 600`). `swift Scripts/update-key.swift keygen` creates a key if there's none yet; put the public key it prints into `Updater.signingKey`.
 
 To publish a version:
 
 1. Set `CFBundleShortVersionString` and `CFBundleVersion` in `Resources/Info.plist`.
-2. Run `./build-app.sh`, which also writes `build/Network-Scanner-<version>.dmg` and, on the Mac holding the release key, its signature `build/Network-Scanner-<version>.dmg.sig`.
+2. Run `./build-app.sh`, which also writes `build/Network-Scanner-<version>.dmg` and, when the key file is there, its signature `build/Network-Scanner-<version>.dmg.sig`.
 3. Commit, then tag and publish the release with both files attached. Its notes appear in the update prompt.
 
    ```bash
